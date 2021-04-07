@@ -22,6 +22,11 @@ pipeline{
 			      echo 'performing code review'
 			      sh 'mvn pmd:pmd'
 		      }
+		      post{
+			      success{
+				      echo 'need to generate a readable report'
+			      }
+		      }
 		}      
 		stage('code_testing'){
 			steps{
