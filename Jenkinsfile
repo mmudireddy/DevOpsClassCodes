@@ -52,7 +52,7 @@ pipeline{
 			}
 			post{
 				always{
-					echo 'Hurray! finished packaging the code'
+					echo 'Hurray!!! finished packaging the code'
 				}
 			}
 		}
