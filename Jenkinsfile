@@ -50,6 +50,11 @@ pipeline{
 				echo 'packaging the code'
 				sh 'mvn package'
 			}
+			post{
+				always{
+					echo 'Hurray! finished packaging the code'
+				}
+			}
 		}
 	}
  }
