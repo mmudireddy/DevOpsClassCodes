@@ -17,7 +17,7 @@ pipeline{
 				sh 'mvn compile'
 			}
 		}
-		stage('code_review){
+		stage('code_review'){
 		      steps{
 			      echo 'performing code review'
 			      sh 'mvn pmd:pmd'
