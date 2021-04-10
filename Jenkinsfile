@@ -3,6 +3,7 @@ pipeline{
 		jdk 'my_java'
 		maven 'my_maven'
 	}
+	agent none
 	stages{
 		stage('clone_repo'){
 			agent any
