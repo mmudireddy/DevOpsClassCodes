@@ -56,7 +56,9 @@ pipeline{
 			}
 		}
 		stage('package'){
-			agent 'lin_node'
+			agent {
+				label 'lin_node'
+			}
 			steps{
 				echo 'packaging the code on slave node'
 				git credentialsId: 'cf5aa903-75a6-4df6-85fa-4d254d9c9e4b', url: 'https://github.com/mmudireddy/DevOpsClassCodes'
