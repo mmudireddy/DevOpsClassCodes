@@ -3,24 +3,21 @@ pipeline{
 		jdk 'my_java'
 		maven 'my_maven'
 	}
-	agent none
+	agent any
 	stages{
 		stage('clone_repo'){
-			agent any
 			steps{
 				echo 'cloning the git repo'
 				git credentialsId: 'cf5aa903-75a6-4df6-85fa-4d254d9c9e4b', url: 'https://github.com/mmudireddy/DevOpsClassCodes'
 			}
 		}
 		stage('compile'){
-			agent any
 			steps{
 				echo 'compiling source code'
 				sh 'mvn compile'
 			}
 		}
 		stage('code_review'){
-		      agent any
 		      steps{
 			      echo 'performing code review'
 			      sh 'mvn pmd:pmd'
@@ -32,7 +29,6 @@ pipeline{
 		      }
 		}      
 		stage('code_testing'){
-			agent any
 			steps{
 				echo 'testing the code'
 				sh 'mvn test'
@@ -44,7 +40,6 @@ pipeline{
 			}
 		}
 		stage('code_coverage'){
-			agent any
 			steps{
 				echo 'checking the code coverage'
 				sh 'mvn cobertura:cobertura -Dcobertura.report.format=xml'
@@ -56,18 +51,31 @@ pipeline{
 			}
 		}
 		stage('package'){
-			agent {
-				label 'lin_node'
-			}
 			steps{
 				echo 'packaging the code on slave node'
-				git credentialsId: 'cf5aa903-75a6-4df6-85fa-4d254d9c9e4b', url: 'https://github.com/mmudireddy/DevOpsClassCodes'
 				sh 'mvn package'
 			}
 			post{
 				always{
 					echo 'Hurray!!! finished packaging the code'
 				}
+			}
+		}
+		stage('deploy'){
+			steps{
+				sh label:'', script: '''rm -rf dockerfolder
+				mkdir dockerfolder
+				cd dockerfolder
+				cp /var/lib/jenkins/workspace/package/target/addressbook.war .
+				touch dockerfile
+				cat <<EOT>> dockerfile
+				FROM tomcat
+				ADD addressbook.war /usr/local/tomcat/webapps
+				EXPOSE 8080
+				CAT ["catalina.sh", "run"]
+				EOT
+				sudo docker build -t my_addbook:$BUILD_NUMBER .
+				sudo docker run -itd -P my_addbook:$BUILD_NUMBER'''
 			}
 		}
 	}
