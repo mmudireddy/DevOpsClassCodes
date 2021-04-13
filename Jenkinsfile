@@ -75,7 +75,7 @@ pipeline{
 				CAT ["catalina.sh", "run"]
 				EOT
 				sudo docker build -t my_addbook:$BUILD_NUMBER .
-				sudo docker run -itd -P my_addbook:$BUILD_NUMBER'''
+				sudo docker run --name my_book -itd -P my_addbook:$BUILD_NUMBER'''
 			}
 			post{
 				success{
