@@ -79,7 +79,7 @@ pipeline{
 			}
 			post{
 				success{
-					sh 'echo deployed the code on tomcat server'
+					echo 'Hurray!!! deployed the code on tomcat server'
 				}
 			}
 		}
