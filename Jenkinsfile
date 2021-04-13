@@ -63,20 +63,19 @@ pipeline{
 		}
 		stage('deploy'){
 			steps{
-				sh label:'', script: '''rm -rf mydockerfolder
-							mkdir mydockerfolder
-							cd mydockerfolder
-							cp /var/lib/jenkins/workspace/package/target/addressbook.war .
-							touch dockerfile
-							cat <<EOT>> dockerfile
-							FROM tomcat
-							MAINTAINER Mounika Mudireddy
-							ADD addressbook.war /usr/local/tomcat/webapps
-							EXPOSE 8080
-							CMD ["catalina.sh", "run"]
-							EOT
-							sudo docker build -t my_address:$BUILD_NUMBER .
-							sudo docker run --name my_con -itd -P my_address:$BUILD_NUMBER'''
+				sh label:'', script: '''rm -rf dockerfolder
+				mkdir dockerfolder
+				cd dockerfolder
+				cp /var/lib/jenkins/workspace/package/target/addressbook.war .
+				touch dockerfile
+				cat <<EOT>> dockerfile
+				FROM tomcat
+				ADD addressbook.war /usr/local/tomcat/webapps
+				EXPOSE 8080
+				CMD ["catalina.sh", "run"]
+				EOT
+				sudo docker build -t my_addbook:$BUILD_NUMBER .
+				sudo docker run --name my_book -itd -P my_addbook:$BUILD_NUMBER'''
 			}
 			post{
 				success{
